@@ -1,0 +1,66 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: 6379
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://${USER_SERVICE_HOST:user-service}:8081
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1000
+                redis-rate-limiter.burstCapacity: 2000
+                key-resolver: "#{@ipKeyResolver}"
+
+        - id: shipment-service
+          uri: http://${SHIPMENT_SERVICE_HOST:shipment-service}:8082
+          predicates:
+            - Path=/shipments/**
+          filters:
+            - AuthenticationFilter
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 2000
+                redis-rate-limiter.burstCapacity: 4000
+                key-resolver: "#{@ipKeyResolver}"
+
+        - id: tracking-service
+          uri: http://${TRACKING_SERVICE_HOST:tracking-service}:8083
+          predicates:
+            - Path=/tracking/**
+          filters:
+            - AuthenticationFilter
+
+        - id: ai-prediction-service
+          uri: http://${AI_SERVICE_HOST:ai-prediction-service}:8085
+          predicates:
+            - Path=/predictions/**
+          filters:
+            - AuthenticationFilter
+
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:gocomet-super-secret-key-for-jwt-signing-2024}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
