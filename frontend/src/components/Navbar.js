@@ -13,7 +13,7 @@ export default function Navbar() {
       <div style={s.inner}>
         <Link to="/" style={s.brand}>
           <span style={s.logo}>GC</span>
-          <span style={s.brandText}>GoComet Tracker</span>
+          <span style={s.brandText}>Tracking System</span>
         </Link>
         <div style={s.links}>
           {isAuthenticated ? (
