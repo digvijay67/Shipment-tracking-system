@@ -19,27 +19,19 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build & Push User Service
+      - name: Build & Push All Services
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/user-service:latest ./user-service
           docker push ${{ secrets.DOCKER_USERNAME }}/user-service:latest
 
-      - name: Build & Push Tracking Service
-        run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/tracking-service:latest ./tracking-service
           docker push ${{ secrets.DOCKER_USERNAME }}/tracking-service:latest
 
-      - name: Build & Push Shipment Service
-        run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/shipment-service:latest ./shipment-service
           docker push ${{ secrets.DOCKER_USERNAME }}/shipment-service:latest
 
-      - name: Build & Push API Gateway
-        run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/api-gateway:latest ./api-gateway
           docker push ${{ secrets.DOCKER_USERNAME }}/api-gateway:latest
 
-      - name: Build & Push Frontend
-        run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
