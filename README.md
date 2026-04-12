@@ -83,3 +83,8 @@ docker compose exec redis redis-cli ping # verify Redis
 docker compose exec postgres psql -U gocomet -c "\l"  # verify DB
 curl http://localhost/health             # Nginx health
 ```
+
+
+## Demo---
+
+[Recording 2026-04-13 003738.mp4](../../../../Videos/Recording%202026-04-13%20003738.mp4)
