@@ -151,7 +151,9 @@ services:
   # ── Microservices ────────────────────────────────────────────
 
   user-service:
-    image: digvijaysing/user-service:latest
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
     container_name: gocomet-user-service
     environment:
       DB_HOST: postgres
@@ -178,7 +180,9 @@ services:
     restart: unless-stopped
 
   shipment-service:
-    image: digvijaysing/shipment-service:latest
+    build:
+      context: ./shipment-service
+      dockerfile: Dockerfile
     container_name: gocomet-shipment-service
     environment:
       DB_HOST: postgres
@@ -188,8 +192,6 @@ services:
       KAFKA_BROKERS: kafka:9092
       JWT_SECRET: gocomet-super-secret-key-for-jwt-signing-2024
       SPRING_PROFILES_ACTIVE: docker
-    ports:
-      - "8082:8082"
     depends_on:
       postgres:
         condition: service_healthy
@@ -213,10 +215,10 @@ services:
     restart: unless-stopped
 
   tracking-service:
-    image: digvijaysing/tracking-service:latest
+    build:
+      context: ./tracking-service
+      dockerfile: Dockerfile
     container_name: gocomet-tracking-service
-    ports:
-      - "8083:8083"
     environment:
       DB_HOST: postgres
       DB_USER: postgres
@@ -247,7 +249,9 @@ services:
     restart: unless-stopped
 
   notification-service:
-    image: digvijaysing/notification-service:latest
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
     container_name: gocomet-notification-service
     environment:
       KAFKA_BROKERS: kafka:9092
@@ -265,7 +269,9 @@ services:
     restart: unless-stopped
 
   ai-prediction-service:
-    image: digvijaysing/ai-prediction-service:latest
+    build:
+      context: ./ai-prediction-service
+      dockerfile: Dockerfile
     container_name: gocomet-ai-prediction-service
     environment:
       REDIS_HOST: redis
@@ -289,10 +295,10 @@ services:
     restart: unless-stopped
 
   api-gateway:
-    image: digvijaysing/api-gateway:latest
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     container_name: gocomet-api-gateway
-    ports:
-      - "8080:8080"
     environment:
       USER_SERVICE_HOST: user-service
       SHIPMENT_SERVICE_HOST: shipment-service
@@ -326,10 +332,10 @@ services:
   # ── Frontend ─────────────────────────────────────────────────
 
   frontend:
-    image: digvijaysing/frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: gocomet-frontend
-    ports:
-      - "80:80"
     environment:
       REACT_APP_API_URL: http://localhost/api
     networks:
