@@ -1,7 +1,7 @@
 version: '3.9'
 
 # ================================================================
-# GoComet Shipment Tracking System - Docker Compose
+#  Shipment Tracking System - Docker Compose
 # Handles 5M req/day via horizontal scaling + caching + Kafka
 # ================================================================
 
