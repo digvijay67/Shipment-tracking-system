@@ -151,9 +151,9 @@ services:
   # ── Microservices ────────────────────────────────────────────
 
   user-service:
-    # build:
-    #   context: ./user-service
-    #   dockerfile: Dockerfile
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
     image: digvijaysing/user-service:latest
     container_name: gocomet-user-service
     ports:
@@ -183,9 +183,9 @@ services:
     restart: unless-stopped
 
   shipment-service:
-    # build:
-    #   context: ./shipment-service
-    #   dockerfile: Dockerfile
+    build:
+      context: ./shipment-service
+      dockerfile: Dockerfile
      image: digvijaysing/shipment-service:latest
     container_name: gocomet-shipment-service
     environment:
@@ -219,9 +219,9 @@ services:
     restart: unless-stopped
 
   tracking-service:
-    # build:
-    #   context: ./tracking-service
-    #   dockerfile: Dockerfile
+    build:
+      context: ./tracking-service
+      dockerfile: Dockerfile
     image: digvijaysing/tracking-service:latest
     container_name: gocomet-tracking-service
     environment:
@@ -254,9 +254,9 @@ services:
     restart: unless-stopped
 
   notification-service:
-    # build:
-    #   context: ./notification-service
-    #   dockerfile: Dockerfile
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
      image: digvijaysing/notification-service:latest
     container_name: gocomet-notification-service
     environment:
@@ -275,9 +275,9 @@ services:
     restart: unless-stopped
 
   ai-prediction-service:
-    # build:
-    #   context: ./ai-prediction-service
-    #   dockerfile: Dockerfile
+    build:
+      context: ./ai-prediction-service
+      dockerfile: Dockerfile
     image: digvijaysing/ai-prediction-service:latest
     container_name: gocomet-ai-prediction-service
     environment:
@@ -302,9 +302,9 @@ services:
     restart: unless-stopped
 
   api-gateway:
-    # build:
-    #   context: ./api-gateway
-    #   dockerfile: Dockerfile
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     image: digvijaysing/api-gateway:latest
   ports:
     - "8080:8080"
@@ -342,9 +342,9 @@ services:
   # ── Frontend ─────────────────────────────────────────────────
 
   frontend:
-    # build:
-    #   context: ./frontend
-    #   dockerfile: Dockerfile
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     image: digvijaysing/frontend:latest
   ports:
     - "80:80"
