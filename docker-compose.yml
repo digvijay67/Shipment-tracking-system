@@ -156,7 +156,7 @@ services:
     #   dockerfile: Dockerfile
     image: digvijaysing/user-service:latest
     container_name: gocomet-user-service
-     ports:
+    ports:
     - "8081:8081"
     environment:
       DB_HOST: postgres
