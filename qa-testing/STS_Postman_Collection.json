@@ -1,0 +1,432 @@
+{
+  "info": {
+    "name": "Shipment Tracking System \u2014 QA Collection",
+    "_postman_id": "sts-qa-collection-v1",
+    "description": "Complete API test collection for Shipment Tracking System. Base URL: http://localhost. Run in order for best results.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "shipmentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - User Service",
+      "item": [
+        {
+          "name": "TC-US-001 Register User (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('UserId returned', () => { const j = pm.response.json(); pm.expect(j.userId).to.exist; pm.collectionVariables.set('userId', j.userId); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/users/register",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Digvijay QA\", \"email\": \"qa.tester@shiptest.com\", \"password\": \"Test@1234\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-US-002 Register Duplicate Email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/users/register",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"Digvijay QA\", \"email\": \"qa.tester@shiptest.com\", \"password\": \"Test@1234\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-US-005 Login - Valid Credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('JWT token returned', () => { const j = pm.response.json(); pm.expect(j.token).to.exist; pm.collectionVariables.set('token', j.token); });",
+                  "pm.test('Response time < 500ms', () => pm.expect(pm.response.responseTime).to.be.below(500));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/users/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"qa.tester@shiptest.com\", \"password\": \"Test@1234\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-US-006 Login - Wrong Password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/users/login",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"qa.tester@shiptest.com\", \"password\": \"WrongPassword\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-US-010 Access Protected Route Without Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shipments"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - Shipment Service",
+      "item": [
+        {
+          "name": "TC-SS-001 Create Shipment (Valid)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 201', () => pm.response.to.have.status(201));",
+                  "pm.test('ShipmentId returned', () => { const j = pm.response.json(); pm.expect(j.shipmentId).to.exist; pm.collectionVariables.set('shipmentId', j.shipmentId); });",
+                  "pm.test('Status is CREATED', () => pm.expect(pm.response.json().status).to.equal('CREATED'));",
+                  "pm.test('Response time < 500ms', () => pm.expect(pm.response.responseTime).to.be.below(500));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/shipments",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"origin\": \"Mumbai\", \"destination\": \"Delhi\", \"weight\": 12.5, \"carrier\": \"BlueDart\", \"description\": \"Electronics Package\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-SS-003 Get Shipment By ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Correct shipment returned', () => pm.expect(pm.response.json().shipmentId).to.equal(pm.collectionVariables.get('shipmentId')));",
+                  "pm.test('Response time < 100ms (cache hit)', () => pm.expect(pm.response.responseTime).to.be.below(100));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shipments/{{shipmentId}}",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "TC-SS-004 Get Shipment - Not Found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/shipments/nonexistent-id-99999",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "TC-SS-006 Update Shipment Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status updated to IN_TRANSIT', () => pm.expect(pm.response.json().status).to.equal('IN_TRANSIT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/shipments/{{shipmentId}}/status",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"IN_TRANSIT\"}"
+            }
+          }
+        },
+        {
+          "name": "TC-SS-007 Invalid Status Transition (BUG-001)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('[BUG-001] Status 400 - invalid transition rejected', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/shipments/{{shipmentId}}/status",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"status\": \"CREATED\"}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Tracking Service",
+      "item": [
+        {
+          "name": "TC-TS-001 Get Live Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status field present', () => pm.expect(pm.response.json().status).to.exist);",
+                  "pm.test('Response time < 50ms (Redis)', () => pm.expect(pm.response.responseTime).to.be.below(50));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/tracking/{{shipmentId}}/live",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        },
+        {
+          "name": "TC-TS-003 Get Full History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('History is array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+                  "pm.test('History has entries', () => pm.expect(pm.response.json().length).to.be.above(0));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/tracking/{{shipmentId}}/history",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - AI Prediction Service",
+      "item": [
+        {
+          "name": "TC-AI-001 Predict ETA and Risk",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('ETA not null', () => pm.expect(pm.response.json().eta).to.not.be.null);",
+                  "pm.test('Risk level valid', () => pm.expect(['LOW','MEDIUM','HIGH']).to.include(pm.response.json().riskLevel));",
+                  "pm.test('Risk score 0-100', () => { const score = pm.response.json().riskScore; pm.expect(score).to.be.at.least(0); pm.expect(score).to.be.at.most(100); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/predictions/predict",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"shipmentId\": \"{{shipmentId}}\", \"distanceKm\": 1400, \"weightKg\": 12.5, \"carrier\": \"BlueDart\", \"weatherFactor\": 1.1, \"trafficFactor\": 1.2}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5 - Rate Limiting",
+      "item": [
+        {
+          "name": "TC-GW-005 Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Response time < 200ms', () => pm.expect(pm.response.responseTime).to.be.below(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    }
+  ]
+}

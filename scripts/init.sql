@@ -42,7 +42,7 @@ INSERT INTO users (email, password_hash, first_name, last_name, role)
 VALUES
     ('admin@gocomet.com',
      '$2a$12$XiidxjONGrOEyX9mvfgntOxKZGToqE4D7wV05EIn9dWQqFJK/kl2e',
-     'Admin', 'GoComet', 'ADMIN'),
+     'Admin', 'gocomet', 'ADMIN'),
     ('demo@gocomet.com',
      '$2a$12$UArxsLNns6NMRouTUOkmUu0crrd1Q6f/9ee6cETcprfAodFN8Pqj6',
      'Demo', 'User', 'USER')
