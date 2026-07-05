@@ -9,9 +9,14 @@ function AuthForm({ title, fields, submitLabel, onSubmit, footer }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); setLoading(true);
+    if (loading) return;
+    setError('');
+    setLoading(true);
     try { await onSubmit(form); }
-    catch (err) { setError(err.response?.data?.message || err.message || 'Something went wrong'); }
+    catch (err) {
+      const message = err?.response?.data?.message || err?.message || 'Something went wrong';
+      setError(message);
+    }
     finally { setLoading(false); }
   };
 

@@ -10,15 +10,21 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); setError(''); setLoading(true);
+    e.preventDefault();
+    if (loading) return;
+    setError('');
+    setLoading(true);
     if (form.password !== form.confirmPassword) {
-      setError('Passwords do not match'); setLoading(false); return;
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
     }
     try {
       await register({ email: form.email, password: form.password, firstName: form.firstName, lastName: form.lastName, phone: form.phone });
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      const message = err?.response?.data?.message || 'Registration failed';
+      setError(message);
     } finally { setLoading(false); }
   };
 

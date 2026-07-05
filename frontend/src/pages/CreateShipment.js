@@ -14,13 +14,17 @@ export default function CreateShipment() {
   const set = (k, v) => setForm(p => ({...p, [k]: v}));
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); setError(''); setLoading(true);
+    e.preventDefault();
+    if (loading) return;
+    setError('');
+    setLoading(true);
     try {
       const payload = { ...form, weightKg: parseFloat(form.weightKg), distanceKm: form.distanceKm ? parseFloat(form.distanceKm) : null, expectedDelivery: form.expectedDelivery || null };
       const res = await shipmentApi.create(payload);
       setSuccess(res.data.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to create shipment');
+      const message = err?.response?.data?.message || 'Failed to create shipment';
+      setError(message);
     } finally { setLoading(false); }
   };
 
