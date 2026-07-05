@@ -28,8 +28,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: gocometdb
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+
+
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -38,7 +40,7 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U gocomet"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -335,9 +337,11 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-/api}
     container_name: gocomet-frontend
     environment:
-      REACT_APP_API_URL: http://localhost/api
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-/api}
     networks:
       - gocomet-net
     deploy:

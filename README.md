@@ -12,6 +12,29 @@ docker compose up --build
 # demo@gocomet.com / demo123
 ```
 
+## AWS EC2 Deployment
+
+This project is ready to run on an Ubuntu EC2 instance with Docker Compose.
+
+1. Open port 80 (and 443 if you plan to terminate TLS at the instance) in the EC2 security group.
+2. Copy the repository to the instance and run:
+
+```bash
+bash scripts/deploy-ec2.sh <ec2-public-ip>
+```
+
+3. After the deployment finishes, open:
+
+```text
+http://<ec2-public-ip>
+```
+
+Optional environment overrides:
+
+```bash
+REACT_APP_API_URL=/api JWT_SECRET=change-me DB_USER=postgres DB_PASS=postgres bash scripts/deploy-ec2.sh <ec2-public-ip>
+```
+
 ## Architecture
 
 ```

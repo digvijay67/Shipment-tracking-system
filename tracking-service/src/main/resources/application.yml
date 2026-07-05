@@ -6,8 +6,8 @@ spring:
     name: tracking-service
   datasource:
     url: jdbc:postgresql://${DB_HOST:postgres}:5432/gocomet_tracking
-    username: ${DB_USER:gocomet}
-    password: ${DB_PASS:gocomet123}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
     hikari:
       maximum-pool-size: 80
       minimum-idle: 20
