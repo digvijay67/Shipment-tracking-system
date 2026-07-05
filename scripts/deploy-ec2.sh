@@ -12,6 +12,13 @@ export JWT_SECRET="${JWT_SECRET:-gocomet-super-secret-key-for-jwt-signing-2024}"
 export DB_USER="${DB_USER:-postgres}"
 export DB_PASS="${DB_PASS:-postgres}"
 
+available_kb=$(df / | awk 'NR==2 {print $4}')
+if [ "$available_kb" -lt 5000000 ]; then
+  echo "Disk space is too low on this EC2 instance. Increase the root volume to at least 20 GB and rerun this script." >&2
+  exit 1
+fi
+
+sudo apt-get clean || true
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl gnupg lsb-release
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -22,6 +29,8 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plu
 sudo systemctl enable docker
 sudo systemctl start docker
 sudo usermod -aG docker "$USER"
+
+sudo docker system prune -af --volumes || true
 
 sudo mkdir -p /opt/shipment-tracking-system
 sudo cp -r . /opt/shipment-tracking-system/
