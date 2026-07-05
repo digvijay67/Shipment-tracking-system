@@ -169,11 +169,11 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep UP"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q 'UP'"]
       interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      timeout: 20s
+      retries: 10
+      start_period: 300s
     deploy:
       resources:
         limits:
@@ -204,11 +204,11 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep UP"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8082/actuator/health | grep -q 'UP'"]
       interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      timeout: 20s
+      retries: 10
+      start_period: 300s
     deploy:
       resources:
         limits:
@@ -238,11 +238,11 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health | grep UP"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8083/actuator/health | grep -q 'UP'"]
       interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      timeout: 20s
+      retries: 10
+      start_period: 300s
     deploy:
       resources:
         limits:
@@ -284,11 +284,11 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health | grep UP"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8085/actuator/health | grep -q 'UP'"]
       interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 60s
+      timeout: 20s
+      retries: 10
+      start_period: 300s
     deploy:
       resources:
         limits:
@@ -319,11 +319,11 @@ services:
     networks:
       - gocomet-net
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q 'UP'"]
       interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 90s
+      timeout: 20s
+      retries: 10
+      start_period: 300s
     deploy:
       resources:
         limits:
